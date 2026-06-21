@@ -8,23 +8,6 @@
 
 A smart healthcare platform that uses Machine Learning to assess brain stroke risk, maintain patient records, provide stroke awareness resources, and support hospital registration through a secure web application.
 
----
-
-## 📑 Table of Contents
-
-- [Features](#-features)
-- [Tech Stack](#️-tech-stack)
-- [How It Works](#-how-prediction-works)
-- [User Flows](#-user-flows)
-- [Roles & Access](#-roles--access)
-- [Local Setup](#️-local-setup)
-- [Project Structure](#-project-structure)
-- [Requirements](#-requirements)
-- [Environment Notes](#-environment-notes)
-- [Future Improvements](#-future-improvements)
-- [Author](#-author)
-
----
 
 ## 🚀 Features
 
