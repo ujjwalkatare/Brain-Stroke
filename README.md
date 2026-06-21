@@ -191,7 +191,7 @@ pip install flask numpy pandas scikit-learn werkzeug
 ## 👨‍💻 Author
 
 **Ujjwal Katare**
-Python Developer | Flask Developer | Machine Learning Enthusiast
+
 
 ---
 
