@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create account — NeuroPulse</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    :root {
+      --ink: #101C2C;
+      --ink-soft: #44525B;
+      --paper: #F4F6F5;
+      --paper-raise: #FFFFFF;
+      --teal: #0E6E63;
+      --teal-deep: #0A4D45;
+      --coral: #E14B2A;
+      --mist: #E4EDEA;
+      --line: #D7DCD6;
+
+      --f-display: 'Space Grotesk', sans-serif;
+      --f-body: 'IBM Plex Sans', sans-serif;
+      --f-mono: 'IBM Plex Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--f-body);
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--teal);
+      outline-offset: 3px;
+    }
+
+    .ns-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: 19px;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+
+    .ns-brand svg {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    /* ---------- Flash messages ---------- */
+    .flash-stack {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .flash {
+      font-family: var(--f-mono);
+      font-size: 13px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      background: var(--mist);
+      border: 1px solid var(--line);
+      color: var(--teal-deep);
+    }
+
+    .flash--danger {
+      background: #FBE7E1;
+      border-color: #F0C2B2;
+      color: #9B3417;
+    }
+
+    .flash--success {
+      background: #E4F1EA;
+      border-color: #BFDCCB;
+      color: #1E6B45;
+    }
+
+    /* ---------- Split screen ---------- */
+    .ns-auth {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    .ns-auth__visual {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink);
+      color: #fff;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .ns-auth__visual .ns-brand {
+      color: #fff;
+    }
+
+    .ns-auth__visual .ns-brand svg path {
+      stroke: #3FCB9B;
+    }
+
+    .ns-auth__quote {
+      max-width: 420px;
+    }
+
+    .ns-auth__quote p.big {
+      font-family: var(--f-display);
+      font-weight: 600;
+      font-size: clamp(24px, 2.6vw, 32px);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      margin: 0 0 18px;
+    }
+
+    .ns-auth__quote p.small {
+      font-size: 14.5px;
+      color: #A9B8B3;
+      margin: 0 0 24px;
+    }
+
+    .ns-auth__checklist {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .ns-auth__checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13.5px;
+      color: #D7E2DE;
+    }
+
+    .ns-auth__checklist svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: #3FCB9B;
+    }
+
+    .ns-auth__trace {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 90px;
+      height: 60px;
+      opacity: .5;
+    }
+
+    .ns-auth__trace svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .ns-auth__trace path {
+      fill: none;
+      stroke: #3FCB9B;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 600;
+      stroke-dashoffset: 600;
+      animation: trace 2.6s ease-in-out infinite;
+    }
+
+    @keyframes trace {
+      0% {
+        stroke-dashoffset: 600;
+      }
+
+      55% {
+        stroke-dashoffset: 0;
+      }
+
+      100% {
+        stroke-dashoffset: -600;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ns-auth__trace path {
+        animation: none;
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .ns-auth__foot {
+      font-family: var(--f-mono);
+      font-size: 12px;
+      color: #7E8F89;
+    }
+
+    .ns-auth__panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .ns-auth__form {
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .ns-auth__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      text-decoration: none;
+      margin-bottom: 30px;
+    }
+
+    .ns-auth__back:hover {
+      color: var(--teal-deep);
+    }
+
+    .ns-auth__form h1 {
+      font-family: var(--f-display);
+      font-size: 26px;
+      margin: 0 0 6px;
+    }
+
+    .ns-auth__form p.lede {
+      color: var(--ink-soft);
+      font-size: 14.5px;
+      margin: 0 0 28px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      font-family: var(--f-body);
+      font-size: 14.5px;
+      background: var(--paper-raise);
+      color: var(--ink);
+      transition: border-color .15s;
+    }
+
+    .field input:focus {
+      border-color: var(--teal);
+      outline: none;
+    }
+
+    .field .hint {
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin: 6px 0 0;
+    }
+
+    .btn-submit {
+      width: 100%;
+      border: none;
+      cursor: pointer;
+      background: var(--teal);
+      color: #fff;
+      font-family: var(--f-body);
+      font-weight: 600;
+      font-size: 15px;
+      padding: 13px;
+      border-radius: 7px;
+      margin-top: 6px;
+      transition: background .15s;
+    }
+
+    .btn-submit:hover {
+      background: var(--teal-deep);
+    }
+
+    .ns-auth__alt {
+      text-align: center;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      margin-top: 22px;
+    }
+
+    .ns-auth__alt a {
+      color: var(--teal-deep);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .ns-auth__alt a:hover {
+      text-decoration: underline;
+    }
+
+    .ns-auth__disclaimer {
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin-top: 34px;
+      line-height: 1.5;
+    }
+
+    @media (max-width:860px) {
+      .ns-auth {
+        grid-template-columns: 1fr;
+      }
+
+      .ns-auth__visual {
+        min-height: 240px;
+        padding: 32px;
+      }
+
+      .ns-auth__quote p.big {
+        font-size: 21px;
+      }
+
+      .ns-auth__checklist {
+        display: none;
+      }
+
+      .ns-auth__trace {
+        bottom: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ns-auth">
+
+    <!-- ===== Left: brand visual ===== -->
+    <div class="ns-auth__visual">
+      <a href="{{ url_for('index') }}" class="ns-brand">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M3 12h4l2-7 4 14 2-7h6" stroke="#3FCB9B" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        NeuroPulse
+      </a>
+
+      <div class="ns-auth__quote">
+        <p class="big">Every clinician deserves a faster first read.</p>
+        <p class="small">Create an account to start logging patients, uploading scans, and getting an AI-assisted
+          reading in seconds.</p>
+        <ul class="ns-auth__checklist">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+            Stroke-positive screening in seconds, not minutes
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+            Every patient and result kept in one history log
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+            Built to support — never replace — clinical judgment
+          </li>
+        </ul>
+      </div>
+
+      <div class="ns-auth__trace" aria-hidden="true">
+        <svg viewBox="0 0 800 60" preserveAspectRatio="none">
+          <path
+            d="M0,30 L120,30 L145,8 L165,52 L190,30 L320,30 L345,14 L365,46 L390,30 L520,30 L545,8 L565,52 L590,30 L720,30 L745,14 L765,46 L790,30 L800,30" />
+        </svg>
+      </div>
+
+      <p class="ns-auth__foot">© 2024 NeuroPulse — AI-assisted stroke screening</p>
+    </div>
+
+    <!-- ===== Right: register form ===== -->
+    <div class="ns-auth__panel">
+      <div class="ns-auth__form">
+        <a href="{{ url_for('index') }}" class="ns-auth__back">&larr; Back to home</a>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-stack">
+          {% for category, message in messages %}
+          <div class="flash flash--{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <h1>Create an account</h1>
+        <p class="lede">Set up your access — you'll register your clinical details after signing in.</p>
+
+        <form method="POST" action="{{ url_for('register') }}">
+          <div class="field">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="e.g. dr.shah" required autofocus />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="••••••••" required />
+            <p class="hint">Use at least 8 characters, mixing letters and numbers.</p>
+          </div>
+          <button type="submit" class="btn-submit">Create account</button>
+        </form>
+
+        <p class="ns-auth__alt">Already have an account? <a href="{{ url_for('login') }}">Sign in</a></p>
+
+        <p class="ns-auth__disclaimer">NeuroPulse provides AI-assisted screening for informational and workflow support
+          only. It does not replace clinical judgment, diagnosis, or emergency care.</p>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>

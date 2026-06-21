@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — NeuroPulse</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --ink:        #101C2C;
+      --ink-soft:   #44525B;
+      --paper:      #F4F6F5;
+      --paper-raise:#FFFFFF;
+      --teal:       #0E6E63;
+      --teal-deep:  #0A4D45;
+      --coral:      #E14B2A;
+      --mist:       #E4EDEA;
+      --line:       #D7DCD6;
+
+      --f-display: 'Space Grotesk', sans-serif;
+      --f-body:    'IBM Plex Sans', sans-serif;
+      --f-mono:    'IBM Plex Mono', monospace;
+
+      --container: 1180px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; font-family:var(--f-body); color:var(--ink); background:var(--paper);
+      line-height:1.55; -webkit-font-smoothing:antialiased;
+    }
+    a{ color:inherit; }
+    .wrap{ max-width:var(--container); margin:0 auto; padding:0 28px; }
+    :focus-visible{ outline:2px solid var(--teal); outline-offset:3px; }
+
+    /* ---------- Flash messages ---------- */
+    .flash-stack{ max-width:var(--container); margin:18px auto 0; padding:0 28px; display:grid; gap:8px; }
+    .flash{
+      font-family:var(--f-mono); font-size:13px; padding:10px 14px; border-radius:6px;
+      background:var(--mist); border:1px solid var(--line); color:var(--teal-deep);
+    }
+    .flash--danger{ background:#FBE7E1; border-color:#F0C2B2; color:#9B3417; }
+    .flash--success{ background:#E4F1EA; border-color:#BFDCCB; color:#1E6B45; }
+
+    /* ---------- Nav ---------- */
+    .ns-nav{ position:sticky; top:0; z-index:40; background:rgba(244,246,245,0.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--line); }
+    .ns-nav__row{ display:flex; align-items:center; justify-content:space-between; padding:16px 0; }
+    .ns-brand{ display:flex; align-items:center; gap:10px; font-family:var(--f-display); font-weight:700; font-size:19px; letter-spacing:-0.01em; text-decoration:none; }
+    .ns-brand svg{ width:26px; height:26px; flex-shrink:0; }
+    .ns-links{ display:flex; align-items:center; gap:26px; font-size:14.5px; }
+    .ns-links a{ text-decoration:none; color:var(--ink-soft); transition:color .15s; }
+    .ns-links a:hover{ color:var(--teal); }
+    .ns-cta{
+      display:inline-flex; align-items:center; gap:8px; background:var(--ink); color:#fff;
+      text-decoration:none; font-size:14px; font-weight:500; padding:10px 18px; border-radius:7px;
+      transition:background .15s;
+    }
+    .ns-cta:hover{ background:var(--teal-deep); color:#fff; }
+    @media (max-width:760px){ .ns-links a:not(.ns-cta){ display:none; } }
+
+    /* ---------- Hero / welcome ---------- */
+    .ns-hero{ padding:54px 0 8px; }
+    .ns-eyebrow{
+      font-family:var(--f-mono); font-size:12.5px; letter-spacing:.08em; text-transform:uppercase;
+      color:var(--teal-deep); display:flex; align-items:center; gap:8px; margin-bottom:16px;
+    }
+    .ns-eyebrow::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--coral); display:inline-block; }
+    .ns-hero h1{
+      font-family:var(--f-display); font-weight:700; letter-spacing:-0.02em;
+      font-size:clamp(28px, 3.6vw, 42px); line-height:1.1; margin:0 0 14px;
+    }
+    .ns-hero p.lede{ font-size:16px; color:var(--ink-soft); max-width:64ch; margin:0 0 36px; }
+
+    /* ---------- Quick actions ---------- */
+    .ns-actions{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:54px; }
+    .ns-action{
+      background:var(--paper-raise); border:1px solid var(--line); border-radius:12px;
+      padding:22px; text-decoration:none; color:var(--ink); transition:border-color .15s, transform .15s;
+      display:flex; flex-direction:column; gap:14px;
+    }
+    .ns-action:hover{ border-color:var(--teal); transform:translateY(-2px); }
+    .ns-action svg{ width:24px; height:24px; color:var(--teal); }
+    .ns-action h3{ font-family:var(--f-display); font-size:16.5px; margin:0; }
+    .ns-action p{ font-size:13.5px; color:var(--ink-soft); margin:0; }
+    .ns-action span.arrow{ font-family:var(--f-mono); font-size:13px; color:var(--teal-deep); margin-top:auto; }
+    @media (max-width:860px){ .ns-actions{ grid-template-columns:1fr; } }
+
+    /* ---------- Features ---------- */
+    .ns-features{ padding:10px 0 60px; }
+    .ns-features__head{ margin-bottom:32px; max-width:62ch; }
+    .ns-features__head h2{ font-family:var(--f-display); font-size:24px; margin:0 0 8px; }
+    .ns-features__head p{ color:var(--ink-soft); margin:0; font-size:15px; }
+    .ns-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .ns-card{ background:var(--paper-raise); border:1px solid var(--line); border-radius:12px; padding:22px; }
+    .ns-card__top{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+    .ns-card__top svg{ width:22px; height:22px; color:var(--teal); flex-shrink:0; }
+    .ns-card__num{ font-family:var(--f-mono); font-size:11.5px; color:var(--coral); }
+    .ns-card h3{ font-family:var(--f-display); font-size:16px; margin:4px 0 12px; }
+    .ns-card ul{ list-style:none; margin:0; padding:0; display:grid; gap:8px; }
+    .ns-card li{ font-size:13.5px; color:var(--ink-soft); line-height:1.5; }
+    .ns-card li b{ color:var(--ink); font-weight:600; }
+    @media (max-width:980px){ .ns-grid{ grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:640px){ .ns-grid{ grid-template-columns:1fr; } }
+
+    /* ---------- News teaser ---------- */
+    .ns-news{
+      background:var(--ink); color:#fff; border-radius:14px; padding:30px 32px;
+      display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;
+      margin-bottom:56px;
+    }
+    .ns-news h3{ font-family:var(--f-display); font-size:19px; margin:0 0 6px; }
+    .ns-news p{ margin:0; color:#C7D1CD; font-size:14px; max-width:52ch; }
+    .ns-news .btn{
+      font-family:var(--f-body); font-weight:500; font-size:14.5px; text-decoration:none; white-space:nowrap;
+      background:var(--teal); color:#fff; padding:12px 20px; border-radius:7px; transition:background .15s;
+    }
+    .ns-news .btn:hover{ background:#3FCB9B; color:var(--ink); }
+
+    /* ---------- Footer ---------- */
+    .ns-foot{ border-top:1px solid var(--line); padding:30px 0 40px; }
+    .ns-foot__row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
+    .ns-foot p{ font-size:13px; color:var(--ink-soft); margin:0; }
+    .ns-foot .ns-disclaimer{ font-size:12.5px; color:var(--ink-soft); max-width:70ch; margin-top:10px; }
+  </style>
+</head>
+
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-stack">
+        {% for category, message in messages %}
+          <div class="flash flash--{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- ===== Nav ===== -->
+  <nav class="ns-nav">
+    <div class="wrap ns-nav__row">
+      <a href="{{ url_for('second_dashboard') }}" class="ns-brand">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 12h4l2-7 4 14 2-7h6" stroke="#0E6E63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        NeuroPulse
+      </a>
+      <div class="ns-links">
+        <a href="{{ url_for('display_history') }}">History</a>
+        <a href="{{ url_for('display_health_news') }}">News</a>
+        <a href="{{ url_for('logout') }}" class="ns-cta">Log out</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Welcome hero ===== -->
+  <header class="ns-hero">
+    <div class="wrap">
+      <p class="ns-eyebrow">Clinical workspace</p>
+      <h1>Welcome back, {{ username }}.</h1>
+      <p class="lede">Register a patient, run a scan, or check in on history below — everything you need for brain stroke detection and management in one place.</p>
+
+      <div class="ns-actions">
+        <a href="{{ url_for('second_register') }}" class="ns-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="4" rx="1"/><path d="M9 14h6M12 11v6"/><path d="M6 5H5a2 2 0 00-2 2v13a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2h-1"/></svg>
+          <h3>Register a patient</h3>
+          <p>Add patient details before running a scan.</p>
+          <span class="arrow">Get started &rarr;</span>
+        </a>
+        <a href="{{ url_for('second_register') }}" class="ns-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <h3>Run a scan</h3>
+          <p>Upload a brain scan for an AI-assisted reading.</p>
+          <span class="arrow">Start screening &rarr;</span>
+        </a>
+        <a href="{{ url_for('display_history') }}" class="ns-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <h3>View history</h3>
+          <p>Review past patients and prediction results.</p>
+          <span class="arrow">Open history &rarr;</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Features ===== -->
+  <section class="ns-features">
+    <div class="wrap">
+      <div class="ns-features__head">
+        <h2>Everything your stroke care team needs</h2>
+        <p>An overview of what NeuroPulse covers, from diagnostics to ongoing patient support.</p>
+      </div>
+
+      <div class="ns-grid">
+
+        <div class="ns-card">
+          <div class="ns-card__top">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-6 8 6v12M9 21v-7h6v7"/></svg>
+            <span class="ns-card__num">01</span>
+          </div>
+          <h3>About Us</h3>
+          <ul>
+            <li><b>Mission:</b> high-quality, fast-turnaround care for stroke patients.</li>
+            <li><b>Vision:</b> measurable progress in stroke prevention, treatment, and research.</li>
+            <li><b>History:</b> our background, founding, and key milestones.</li>
+          </ul>
+        </div>
+
+        <div class="ns-card">
+          <div class="ns-card__top">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a3 3 0 013-3 3 3 0 013 3v2"/><path d="M3 13h18"/></svg>
+            <span class="ns-card__num">02</span>
+          </div>
+          <h3>Services</h3>
+          <ul>
+            <li><b>Comprehensive stroke care:</b> the full range of services offered.</li>
+            <li><b>Emergency services:</b> 24/7 care for stroke patients.</li>
+            <li><b>Neurology:</b> specialized care from experienced neurologists.</li>
+            <li><b>Rehabilitation:</b> physical, occupational, and speech therapy.</li>
+            <li><b>Diagnostics:</b> advanced CT and MRI imaging.</li>
+            <li><b>Research:</b> clinical trial opportunities.</li>
+          </ul>
+        </div>
+
+        <div class="ns-card">
+          <div class="ns-card__top">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+            <span class="ns-card__num">03</span>
+          </div>
+          <h3>Patient Resources</h3>
+          <ul>
+            <li><b>Stroke education:</b> recognizing symptoms (FAST) and prevention tips.</li>
+            <li><b>Patient stories:</b> testimonials from stroke survivors.</li>
+            <li><b>FAQs:</b> common questions about treatment and procedures.</li>
+          </ul>
+        </div>
+
+        <div class="ns-card">
+          <div class="ns-card__top">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg>
+            <span class="ns-card__num">04</span>
+          </div>
+          <h3>Physicians &amp; Staff</h3>
+          <ul>
+            <li><b>Expert team:</b> profiles of neurologists, surgeons, and rehab specialists.</li>
+            <li><b>Multidisciplinary approach:</b> specialists collaborating on comprehensive care.</li>
+          </ul>
+        </div>
+
+        <div class="ns-card">
+          <div class="ns-card__top">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 7h.01M15 7h.01M9 11h.01M15 11h.01M9 15h.01M15 15h.01"/></svg>
+            <span class="ns-card__num">05</span>
+          </div>
+          <h3>Facilities</h3>
+          <ul>
+            <li><b>State-of-the-art equipment:</b> the latest in diagnosis and treatment technology.</li>
+            <li><b>Comfortable environment:</b> patient rooms and rehab spaces designed for recovery.</li>
+          </ul>
+        </div>
+
+        <div class="ns-card">
+          <div class="ns-card__top">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18"/></svg>
+            <span class="ns-card__num">06</span>
+          </div>
+          <h3>Community Outreach</h3>
+          <ul>
+            <li><b>Awareness programs:</b> community education initiatives and workshops.</li>
+            <li><b>Support groups:</b> resources for stroke survivors and their families.</li>
+          </ul>
+        </div>
+
+        <div class="ns-card">
+          <div class="ns-card__top">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            <span class="ns-card__num">07</span>
+          </div>
+          <h3>Contact Us</h3>
+          <ul>
+            <li><b>Get in touch:</b> contact details and inquiry form.</li>
+            <li><b>Location:</b> address and directions.</li>
+            <li><b>Hours:</b> 24/7 availability, including how to book consultations or follow-ups.</li>
+            <li><b>Emergency contact:</b> direct line for emergency services.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== News teaser ===== -->
+  <div class="wrap">
+    <div class="ns-news">
+      <div>
+        <h3>Stay current on stroke care</h3>
+        <p>Read the latest health and medical news, curated for our clinical team.</p>
+      </div>
+      <a href="{{ url_for('display_health_news') }}" class="btn">Read the latest news</a>
+    </div>
+  </div>
+
+  <footer class="ns-foot">
+    <div class="wrap">
+      <div class="ns-foot__row">
+        <div class="ns-brand" style="font-size:15px;">
+          <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M3 12h4l2-7 4 14 2-7h6" stroke="#0E6E63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          NeuroPulse
+        </div>
+        <p>© 2024 NeuroPulse. All rights reserved.</p>
+      </div>
+      <p class="ns-disclaimer">NeuroPulse provides AI-assisted screening for informational and workflow support only. It does not replace clinical judgment, diagnosis, or emergency care. Always consult a qualified healthcare professional.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
