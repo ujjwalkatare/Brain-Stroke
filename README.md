@@ -1,89 +1,125 @@
-# 🧠 NeuroPulse — AI-Powered Brain Stroke Detection System
+# 🧠 NeuroPulse — AI-Powered Brain Stroke Detection & Health Monitoring System
 
-A Flask-based web application that helps users assess brain stroke risk using machine learning. The platform provides stroke prediction, health awareness resources, hospital registration, and prediction history tracking through a clean and user-friendly interface.
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![Flask](https://img.shields.io/badge/Flask-3.x-black)
+![SQLite](https://img.shields.io/badge/SQLite-Database-green)
+![Machine Learning](https://img.shields.io/badge/Machine%20Learning-Scikit--Learn-orange)
+![HealthCare](https://img.shields.io/badge/Domain-Healthcare-red)
 
----
-
-## 🚀 Features
-
-* 🧠 AI-Based Stroke Prediction — Predict stroke risk using a trained machine learning model
-* 👤 User Authentication — Secure user registration and login system
-* 🏥 Hospital Registration Module — Hospitals can register and manage access
-* 📊 Prediction History — View previous prediction records
-* 📰 Health News Section — Access stroke-related health information and awareness content
-* 🎨 Responsive UI — Clean and mobile-friendly interface
-* 🔐 Session Management — Secure login and authenticated access
-* 📁 Database Storage — Stores user and prediction information
+A smart healthcare platform that uses Machine Learning to assess brain stroke risk, maintain patient records, provide stroke awareness resources, and support hospital registration through a secure web application.
 
 ---
 
-## ⚙️ Tech Stack
+# 🚀 Features
 
-| Layer            | Technology               |
-| ---------------- | ------------------------ |
-| Backend          | Flask (Python)           |
-| Frontend         | HTML, CSS, JavaScript    |
-| Database         | SQLite                   |
-| Machine Learning | Scikit-Learn             |
-| Authentication   | Flask Session Management |
+* 🧠 AI-Based Brain Stroke Prediction using Machine Learning
+* 👤 Secure User Registration & Login System
+* 📊 Prediction History Tracking
+* 🏥 Hospital Registration Portal
+* 📰 Health News & Stroke Awareness Section
+* 🔐 Session-Based Authentication
+* 📁 Database Storage for Users & Predictions
+* 📈 Instant Prediction Results
+* 🎨 Responsive User Interface
+* ⚡ Fast Flask-Based Backend
 
 ---
 
-## 🔗 How It Works
+# ⚙️ Tech Stack
 
-### STROKE PREDICTION FLOW
+| Layer            | Technology              |
+| ---------------- | ----------------------- |
+| Backend          | Flask (Python)          |
+| Frontend         | HTML5, CSS3, JavaScript |
+| Database         | SQLite                  |
+| Machine Learning | Scikit-Learn            |
+| Authentication   | Flask Sessions          |
+| UI Design        | Bootstrap               |
 
-User Login/Register
+---
+
+# 🔗 Brain Stroke Prediction Flow
+
+### USER FLOW
+
+User Registration/Login
+
 → Enter Health Information
-→ ML Model Processes Input
-→ Stroke Risk Prediction Generated
-→ Result Displayed to User
-→ Prediction Stored in History
 
-### HOSPITAL REGISTRATION FLOW
+→ Submit Prediction Request
+
+→ Machine Learning Model Analysis
+
+→ Stroke Risk Prediction Generated
+
+→ Results Displayed
+
+→ History Stored in Database
+
+---
+
+### HOSPITAL FLOW
 
 Hospital Registration
-→ Submit Details
-→ Account Created
-→ Access Dashboard Features
 
-### HEALTH NEWS FLOW
+→ Submit Hospital Information
 
-User Opens Health News
-→ Fetch Stroke Awareness Content
-→ Display Latest Health Information
+→ Registration Stored
+
+→ Hospital Dashboard Access
 
 ---
 
-## 🛠️ Local Setup
+### HEALTH AWARENESS FLOW
 
-### 1. Clone the Repository
+User Opens Health News
+
+→ Reads Stroke Awareness Articles
+
+→ Learns Prevention & Safety Measures
+
+---
+
+# 👥 Roles & Access
+
+| Role                 | Access                                             |
+| -------------------- | -------------------------------------------------- |
+| User                 | Register, Login, Predict Stroke Risk, View History |
+| Hospital             | Register Hospital Information                      |
+| Admin (Future Scope) | Manage Users, Hospitals & Reports                  |
+
+---
+
+# 🛠️ Local Setup
+
+## 1. Clone the Repository
 
 ```bash
 git clone https://github.com/ujjwalkatare/Brain-Stroke.git
 cd Brain-Stroke
 ```
 
-### 2. Create Virtual Environment
+## 2. Create Virtual Environment
 
 ```bash
 python -m venv env
+
 env\Scripts\activate
 ```
 
-### 3. Install Dependencies
+## 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Run the Application
+## 4. Run Application
 
 ```bash
 python app.py
 ```
 
-### 5. Open in Browser
+## 5. Open Browser
 
 ```text
 http://127.0.0.1:5000
@@ -91,12 +127,16 @@ http://127.0.0.1:5000
 
 ---
 
-## 📁 Project Structure
+# 📂 Project Structure
 
 ```text
 Brain-Stroke/
 │
 ├── app.py
+├── app.spec
+├── README.md
+├── .gitignore
+│
 ├── templates/
 │   ├── index.html
 │   ├── login.html
@@ -113,73 +153,80 @@ Brain-Stroke/
 │   ├── js/
 │   └── images/
 │
-├── requirements.txt
-├── README.md
-└── .gitignore
+└── instance/
 ```
 
 ---
 
-## 📦 Requirements
+# 📦 Requirements
 
 ```text
 Flask
-scikit-learn
-numpy
-pandas
-joblib
-werkzeug
+NumPy
+Pandas
+Scikit-Learn
+Werkzeug
+SQLite
 ```
 
 Install:
 
 ```bash
-pip install -r requirements.txt
+pip install flask numpy pandas scikit-learn werkzeug
 ```
 
 ---
 
-## 🎯 Key Modules
+# 🔒 Environment Notes
 
-### User Management
-
-* User Registration
-* User Login
-* Session Handling
-
-### Stroke Prediction
-
-* ML-Based Prediction
-* Risk Assessment
-* Prediction Storage
-
-### Hospital Management
-
-* Hospital Registration
-* Data Management
-
-### Health Awareness
-
-* Stroke Information
-* Health News Content
+* Do not upload virtual environments to GitHub
+* Do not upload database files
+* Store sensitive credentials using environment variables
+* Keep large ML model files outside GitHub repositories
 
 ---
 
-## ⚠️ Notes
+# 💡 How Prediction Works
 
-* Do not commit database files or virtual environments
-* Use environment variables for sensitive configuration
-* Keep machine learning model files outside GitHub if they are large
-* This project is intended for educational and research purposes
+### 1. User enters health-related information
+
+↓
+
+### 2. Machine Learning model processes the data
+
+↓
+
+### 3. Stroke risk probability is calculated
+
+↓
+
+### 4. Prediction result is displayed
+
+↓
+
+### 5. Prediction history is stored for future reference
 
 ---
 
-## 👨‍💻 Author
+# 🎯 Future Improvements
 
-**Ujjwal Katare**
+* Doctor Dashboard
+* Admin Panel
+* PDF Medical Reports
+* Email Notifications
+* Cloud Database Integration
+* Deep Learning-Based MRI Analysis
 
 ---
 
-## ⭐ Give a Star
+# 👨‍💻 Author
 
-If you found this project useful or interesting, please consider giving it a ⭐ on GitHub.
+### Ujjwal Katare
+
+Python Developer | Flask Developer | Machine Learning Enthusiast
+
+---
+
+# ⭐ Give a Star
+
+If this project helped you or you found it interesting, please consider giving it a ⭐ on GitHub!
